@@ -11,12 +11,14 @@ Windows::Windows(QWidget *parent) :
 
     img->setPixelColor(10,10,QColor(15,15,15));
 
-    QColor tmp(0,0,0);
-    for(int j=0;j<255;j++)
+    QColor tmp;
+    tmp.setHsv(180,255,255);
+    for(int j=0;j<180;j++)
     {
 
         colorList.append(tmp);
-        tmp.setRed(tmp.red()+1);
+        tmp.setHsv(tmp.hsvHue()+1,255,255);
+
     }
     colorList.append(tmp);
     for(int j=0;j<255;j++)
@@ -24,20 +26,16 @@ Windows::Windows(QWidget *parent) :
 
         colorList.append(tmp);
         tmp.setGreen(tmp.green()+1);
-    }
-    colorList.append(tmp);
-    for(int j=0;j<255;j++)
-    {
-
-        colorList.append(tmp);
         tmp.setBlue(tmp.blue()+1);
     }
+    colorList.append(tmp);
+
     colorList.append(tmp);
     for(int i=0;i<32;i++)
     {
         for(int j=0;j<24;j++)
         {
-            img->setPixelColor(i,j,colorList[24*i].rgb());
+            img->setPixelColor(i,j,colorList[((24.0*i)/768)*180].rgb());
         }
 
     }

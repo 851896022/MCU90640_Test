@@ -25,10 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        windows.cpp
+        windows.cpp \
+    add.cpp
 
 HEADERS += \
-        windows.h
+        windows.h \
+    add.h
 
 FORMS += \
-        windows.ui
+        windows.ui \
+    add.ui
