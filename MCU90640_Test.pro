@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         windows.cpp \
     add.cpp \
-    global.cpp
+    global.cpp \
+    qlog.cpp
 
 HEADERS += \
         windows.h \
     add.h \
-    global.h
+    global.h \
+    qlog.h
 
 FORMS += \
         windows.ui \

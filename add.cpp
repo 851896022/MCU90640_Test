@@ -66,8 +66,8 @@ void Add::on_btnAdd_clicked()
 {
     AlarmBase base;
     base.name=ui->txtName->text();
-    base.x=ui->txtX->text().toInt();
-    base.y=ui->txtY->text().toInt();
+    base.x=ui->txtX->text().toInt()-1;
+    base.y=ui->txtY->text().toInt()-1;
     base.temp=ui->txtTemp->text().toInt();
     g->alarmList.append(base);
 

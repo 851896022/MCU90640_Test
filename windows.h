@@ -31,13 +31,18 @@ private slots:
     void on_btnAdd_clicked();
 
     void on_btnDel_clicked();
-
+signals:
+    void stopRead();
+    void startRead(QString);
 private:
     Ui::Windows *ui;
     void closeEvent(QCloseEvent *event);
 public slots:
     void showImg();
     void refAlarmList();
+    void startOk();
+    void doAlarm(int);
+    void celAlarm(int);
 };
 
 #endif // WINDOWS_H

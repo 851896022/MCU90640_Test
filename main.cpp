@@ -3,9 +3,13 @@
 #include "add.h"
 #include <QThread>
 #include <QObject>
+#include "qlog.h"
+#define tumo
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    qInstallMessageHandler(QLog::messageHandler);
     g=new Global;
 
     QThread globalThread;
@@ -16,6 +20,10 @@ int main(int argc, char *argv[])
     Windows w;
     w.show();
 
-
+    QObject::connect(g,SIGNAL(startOk()),&w,SLOT(startOk()));
+    QObject::connect(&w,SIGNAL(startRead(QString)),g,SLOT(startLink(QString)));
+    QObject::connect(&w,SIGNAL(stopRead()),g,SLOT(stopReceive()));
+    QObject::connect(g,SIGNAL(doAlarm(int)),&w,SLOT(doAlarm(int)));
+    QObject::connect(g,SIGNAL(celAlarm(int)),&w,SLOT(celAlarm(int)));
     return a.exec();
 }

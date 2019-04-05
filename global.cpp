@@ -30,14 +30,17 @@ void Global::initThis()
     loadAlarmList();
     receiverTimer=new QTimer;
     connect(receiverTimer,SIGNAL(timeout()),this,SLOT(onReceived()));
-    receiverTimer->start(100);
+    alarmTimer=new QTimer;
+    connect(alarmTimer,SIGNAL(timeout()),this,SLOT(alarm()));
+    //alarmTimer->start(100);
+    //receiverTimer->start(100);
 }
-bool Global::startLink(QString name)
+void Global::startLink(QString name)
 {
     //qDebug()<<"link";
     if(!(serialPort==NULL))
     {
-        serialPort->deleteLater();
+        delete serialPort;
     }
     //qDebug()<<"delet ok";
     serialPort=new QSerialPort(name);
@@ -51,41 +54,58 @@ bool Global::startLink(QString name)
     {
 
         //qDebug()<<"link ok";
-        return true;
+        data.clear();
+        g->receiverTimer->start(100);
+        alarmTimer->start(100);
+        emit startOk();
+        return;
 
     }
     else
     {
 
         //qDebug()<<"link No";
-        return  false;
+        return;
 
     }
+}
+void Global::stopReceive()
+{
+    receiverTimer->stop();
+    serialPort->close();
+    delete serialPort;
+    serialPort=NULL;
+    data.clear();
+
 }
 void Global::onReceived()
 {
 
-
-    if(serialPort&&serialPort->isOpen())
+    //qDebug()<<"========================";
+    if(!(serialPort==NULL))
     {
-        char ch[65536];
-        int realsize=0;
-        if(serialPort->waitForReadyRead())
+        if(serialPort->isOpen())
         {
-            realsize=serialPort->read(ch,65536);
+            char ch[65536];
+            int realsize=0;
+            if(serialPort->waitForReadyRead())
+            {
+                realsize=serialPort->read(ch,65536);
 
-            data.append(ch,realsize);
+                data.append(ch,realsize);
+            }
+            //qDebug()<<"read end "<<realsize;
         }
-        //qDebug()<<"read end "<<realsize;
+
 
 
     }
 
 
-
+//qDebug()<<"========================";
     workImg();
 
-
+//qDebug()<<"========================";
 }
 void Global::workImg()
 {
@@ -95,9 +115,10 @@ void Global::workImg()
     while (1)
     {
         //qDebug()<<data.toHex();
+        //qDebug()<<"========================";
         if(data.count()<1544)
         {
-            qDebug()<<"work data too short";
+            //qDebug()<<"work data too short";
             return;
         }
         if(data[0]==(char)0x5A
@@ -127,6 +148,7 @@ void Global::workImg()
 
                 }
             }
+#ifdef tumo
             *img=img->scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
@@ -134,6 +156,7 @@ void Global::workImg()
                     .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+#endif
             data.remove(0,1544);
 
 
@@ -145,6 +168,7 @@ void Global::workImg()
         else
         {
             data.remove(0,1);
+            //qDebug()<<"========================"<<data.count();
         }
 
     }
@@ -231,4 +255,50 @@ void Global::loadAlarmList()
         file->close();
     }
     file->deleteLater();
+}
+void Global::alarm()
+{
+    for(int i=0;i<alarmList.count();i++)
+    {
+        //AlarmBase alm=alarmList[i];
+        qDebug()<<"alarmList[i]"<<alarmList[i].alarmCount<<"i"<<i;
+        if(alarmList[i].alarmCount<alarmDelay)
+        {
+            if(temp[alarmList[i].y][alarmList[i].x]<alarmList[i].temp)
+            {
+                alarmList[i].alarmCount=0;
+            }
+            else
+            {
+                alarmList[i].alarmCount++;
+            }
+        }
+        else if(alarmList[i].alarmCount==alarmDelay)
+        {
+            if(temp[alarmList[i].y][alarmList[i].x]<alarmList[i].temp)
+            {
+                alarmList[i].alarmCount=0;
+            }
+            else
+            {
+                alarmList[i].alarmCount++;
+                qDebug()<<"emit doAlarm"<<i;
+                emit doAlarm(i);
+            }
+        }
+        else
+        {
+            if(temp[alarmList[i].y][alarmList[i].x]<alarmList[i].temp)
+            {
+                alarmList[i].alarmCount=0;
+                emit celAlarm(i);
+                qDebug()<<"emit celAlarm"<<i;
+            }
+            else
+            {
+
+            }
+        }
+
+    }
 }

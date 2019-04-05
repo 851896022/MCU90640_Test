@@ -58,31 +58,34 @@ void Windows::closeEvent(QCloseEvent *event)
 }
 void Windows::on_btnOpen_clicked()
 {
-    if(g->startLink(ui->comBox->currentText()))
-    {
-        ui->btnOpen->setEnabled(false);
-        ui->comBox->setEnabled(false);
-        ui->btnClose->setEnabled(true);
-    }
-    else
-    {
+    emit startRead( ui->comBox->currentText());
 
-    }
     refAlarmList();
 }
-void Windows::showImg()
+void Windows::startOk()
 {
-    ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)                                               ));
+    ui->btnOpen->setEnabled(false);
+    ui->comBox->setEnabled(false);
+    ui->btnClose->setEnabled(true);
 }
-
 void Windows::on_btnClose_clicked()
 {
-    g->serialPort->close();
+    emit stopRead();
     ui->btnOpen->setEnabled(true);
     ui->comBox->setEnabled(true);
     ui->btnClose->setEnabled(false);
     refAlarmList();
 }
+void Windows::showImg()
+{
+    ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480
+                                                          #ifdef tumo
+                                                              ,Qt::IgnoreAspectRatio, Qt::SmoothTransformation
+                                                          #endif
+                                                              )));
+}
+
+
 void Windows::refAlarmList()
 {
     ui->listWidgetAlarm->clear();
@@ -90,8 +93,8 @@ void Windows::refAlarmList()
     {
         QString str;
         str+=g->alarmList[i].name;
-        str+="|x="+QString::number(g->alarmList[i].x);
-        str+="|y="+QString::number(g->alarmList[i].y);
+        str+="|x="+QString::number(g->alarmList[i].x+1);
+        str+="|y="+QString::number(g->alarmList[i].y+1);
         str+="|报警门限="+QString::number(g->alarmList[i].temp);
         ui->listWidgetAlarm->addItem(str);
     }
@@ -116,4 +119,14 @@ void Windows::on_btnDel_clicked()
     g->alarmList.removeAt(num);
     g->savAlarmList();
     ui->listWidgetAlarm->takeItem(num);
+}
+void Windows::doAlarm(int ch)
+{
+    qDebug()<<"slot doAlarm"<<ch;
+    ui->listWidgetAlarm->item(ch)->setBackgroundColor(QColor(255,100,100));
+}
+void Windows::celAlarm(int ch)
+{
+    qDebug()<<"slot celAlarm"<<ch;
+    ui->listWidgetAlarm->item(ch)->setBackgroundColor(QColor(255,255,255));
 }

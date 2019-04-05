@@ -32,6 +32,9 @@
      </item>
      <item>
       <widget class="QLineEdit" name="txtName">
+       <property name="text">
+        <string>监测点</string>
+       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -46,6 +49,9 @@
      </item>
      <item>
       <widget class="QLineEdit" name="txtX">
+       <property name="text">
+        <string>1</string>
+       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -60,6 +66,9 @@
      </item>
      <item>
       <widget class="QLineEdit" name="txtY">
+       <property name="text">
+        <string>1</string>
+       </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -73,7 +82,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="txtTemp"/>
+      <widget class="QLineEdit" name="txtTemp">
+       <property name="text">
+        <string>50</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnAdd">

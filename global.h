@@ -21,6 +21,7 @@ struct AlarmBase
     int x;
     int y;
     int temp;
+    int alarmCount=0;
 };
 class Global : public QObject
 {
@@ -35,16 +36,20 @@ public:
     float temp[24][32];
     float TA;
     QTimer *receiverTimer;
+    QTimer *alarmTimer;
     int maxTemp=40;
     int minTemp=20;
     QList<AlarmBase> alarmList;
-
+    int alarmDelay=20;
 signals:
     void receiveNewData();
     void imgOk();
     void refAlarmListSignal();
+    void startOk();
+    void doAlarm(int);
+    void celAlarm(int);
 public slots:
-    bool startLink(QString name);
+    void startLink(QString name);
     void onReceived();
     void workImg();
     QColor tempToColor(float temp);
@@ -53,6 +58,8 @@ public slots:
     void refAlarmListSlot();
     void savAlarmList();
     void loadAlarmList();
+    void stopReceive();
+    void alarm();
 };
 extern Global *g;
 #endif // GLOBAL_H
