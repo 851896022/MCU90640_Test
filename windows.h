@@ -7,6 +7,8 @@
 #include <QList>
 #include <QColor>
 #include "global.h"
+#include <QThread>
+#include "add.h"
 namespace Ui {
 class Windows;
 }
@@ -20,13 +22,22 @@ public:
     ~Windows();
     QImage *img;
     QList<QColor> colorList;
+    Add * add=NULL;
 private slots:
     void on_btnOpen_clicked();
 
+    void on_btnClose_clicked();
+
+    void on_btnAdd_clicked();
+
+    void on_btnDel_clicked();
+
 private:
     Ui::Windows *ui;
+    void closeEvent(QCloseEvent *event);
 public slots:
     void showImg();
+    void refAlarmList();
 };
 
 #endif // WINDOWS_H

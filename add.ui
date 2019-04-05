@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>416</height>
+    <width>792</width>
+    <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>温度坐标（可点击选择）X=</string>
+        <string>温度坐标（点击选择）X=</string>
        </property>
       </widget>
      </item>
@@ -64,6 +64,16 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>报警门限温度</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="txtTemp"/>
      </item>
      <item>
       <widget class="QPushButton" name="btnAdd">

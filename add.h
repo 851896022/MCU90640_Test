@@ -21,11 +21,21 @@ public:
 
     QButtonGroup chGroup;
     QGridLayout gBox;
-
+    QTimer timer;
 private slots:
 
     void onCellChanged(int key);
     void refUi();
+    void on_btnAdd_clicked();
+
+    void on_txtTemp_textChanged(const QString &arg1);
+
+    void on_txtY_textChanged(const QString &arg1);
+
+    void on_txtX_textChanged(const QString &arg1);
+signals:
+    void addAlarm();
+    void refAlarmListSignal();
 private:
     Ui::Add *ui;
 };

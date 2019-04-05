@@ -12,6 +12,16 @@
 #include <QColor>
 #include <QImage>
 #include <QTimer>
+#include <QList>
+#include <QApplication>
+struct AlarmBase
+{
+    AlarmBase() {}
+    QString name;
+    int x;
+    int y;
+    int temp;
+};
 class Global : public QObject
 {
     Q_OBJECT
@@ -25,10 +35,14 @@ public:
     float temp[24][32];
     float TA;
     QTimer *receiverTimer;
+    int maxTemp=40;
+    int minTemp=20;
+    QList<AlarmBase> alarmList;
+
 signals:
     void receiveNewData();
     void imgOk();
-
+    void refAlarmListSignal();
 public slots:
     bool startLink(QString name);
     void onReceived();
@@ -36,6 +50,9 @@ public slots:
     QColor tempToColor(float temp);
     QColor tempToColorF(float temp);
     void initThis();
+    void refAlarmListSlot();
+    void savAlarmList();
+    void loadAlarmList();
 };
 extern Global *g;
 #endif // GLOBAL_H

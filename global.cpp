@@ -27,6 +27,7 @@ Global::Global(QObject *parent) : QObject(parent)
 void Global::initThis()
 {
     //connect(this,SIGNAL(receiveNewData()),this,SLOT(workImg()));
+    loadAlarmList();
     receiverTimer=new QTimer;
     connect(receiverTimer,SIGNAL(timeout()),this,SLOT(onReceived()));
     receiverTimer->start(100);
@@ -96,7 +97,7 @@ void Global::workImg()
         //qDebug()<<data.toHex();
         if(data.count()<1544)
         {
-            //qDebug()<<"work data too short";
+            qDebug()<<"work data too short";
             return;
         }
         if(data[0]==(char)0x5A
@@ -109,7 +110,36 @@ void Global::workImg()
             {
                 s16[i]=data[(i+2)*2]+(data[(i+2)*2+1]*256);
             }
-            break;
+            int count=0;
+            for(int i=23;i>=0;i--)
+            {
+                for(int j=0;j<32;j++)
+                {
+                    temp[i][j]=s16[count]/100;
+                    count++;
+                }
+            }
+            for(int i=0;i<23;i++)
+            {
+                for(int j=0;j<32;j++)
+                {
+                    img->setPixelColor(j,i,tempToColor(temp[i][j]));
+
+                }
+            }
+            *img=img->scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                    .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                    .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                    .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                    .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                    .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                    .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            data.remove(0,1544);
+
+
+            emit imgOk();
+
+
 
         }
         else
@@ -126,36 +156,79 @@ void Global::workImg()
 
 
 
-    int count=0;
-    for(int i=23;i>=0;i--)
-    {
-        for(int j=0;j<32;j++)
-        {
-            temp[i][j]=s16[count]/100;
-            count++;
-        }
-    }
-    for(int i=0;i<23;i++)
-    {
-        for(int j=0;j<32;j++)
-        {
-            img->setPixelColor(j,i,tempToColor(temp[i][j]));
-        }
-    }
-    data.remove(0,1544);
-    emit imgOk();
 
 }
 QColor Global::tempToColor(float temp)
 {
-    if(temp<0)temp=0;
-    if(temp>100)temp=100;
+    if(temp<minTemp)temp=minTemp;
+    if(temp>maxTemp)temp=maxTemp;
 
-    return colorList.at((temp/100)*180);
+    return colorList.at(((temp - minTemp)/(maxTemp - minTemp))*180);
 }
 QColor Global::tempToColorF(float temp)
 {
     QColor col=tempToColor(temp);
 
     return QColor(255-col.red(),255-col.green(),255-col.blue());
+}
+
+void Global::refAlarmListSlot()
+{
+
+}
+void Global::savAlarmList()
+{
+    QString str;
+    for(int i=0;i<alarmList.count();i++)
+    {
+        str+=alarmList[i].name+"|";
+        str+=QString::number(alarmList[i].x)+"|";
+        str+=QString::number(alarmList[i].y)+"|";
+        str+=QString::number(alarmList[i].temp)+"\r\n";
+    }
+    QString filename;
+    filename+=(qApp->applicationDirPath()+"/alarm.txt");
+    //判断文件是否存在
+    QFile *file = new QFile(filename);
+    if(file->open(QIODevice::WriteOnly))
+    {
+        file->write(str.toStdString().data());
+        file->flush();
+        file->close();
+    }
+    file->deleteLater();
+}
+void Global::loadAlarmList()
+{
+    QString filename;
+    filename+=(qApp->applicationDirPath()+"/alarm.txt");
+    //判断文件是否存在
+    QFile *file = new QFile(filename);
+    if(file->open(QIODevice::ReadOnly))
+    {
+        for(int i=0;i<1000;i++)
+        {
+            {
+                QString ba(file->readLine());
+                ba.remove("\r");ba.remove("\n");
+                QStringList list=ba.split("|");
+                if(list.count()<4)
+                {
+                    continue;
+                }
+                AlarmBase alarm;
+
+                alarm.name=list.at(0);
+                alarm.x=list.at(1).toInt();
+                alarm.y=list.at(2).toInt();
+                alarm.temp=list.at(3).toInt();
+                alarmList.append(alarm);
+            }
+
+
+            if(file->atEnd())break;
+        }
+        file->close();
+    }
+    file->deleteLater();
 }
