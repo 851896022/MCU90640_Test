@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Windows</string>
+   <string>红外多点温度监测报警系统</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -34,6 +34,13 @@
         </property>
         <property name="text">
          <string>关闭</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>数据插值处理</string>
         </property>
        </widget>
       </item>

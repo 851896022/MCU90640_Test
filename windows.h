@@ -31,6 +31,8 @@ private slots:
     void on_btnAdd_clicked();
 
     void on_btnDel_clicked();
+    void on_checkBox_stateChanged(int arg1);
+
 signals:
     void stopRead();
     void startRead(QString);

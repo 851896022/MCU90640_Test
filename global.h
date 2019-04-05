@@ -14,6 +14,7 @@
 #include <QTimer>
 #include <QList>
 #include <QApplication>
+#define tumo
 struct AlarmBase
 {
     AlarmBase() {}
@@ -41,6 +42,7 @@ public:
     int minTemp=20;
     QList<AlarmBase> alarmList;
     int alarmDelay=20;
+    bool houqi=false;
 signals:
     void receiveNewData();
     void imgOk();

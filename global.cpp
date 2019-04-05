@@ -136,7 +136,7 @@ void Global::workImg()
             {
                 for(int j=0;j<32;j++)
                 {
-                    temp[i][j]=s16[count]/100;
+                    temp[i][j]=((s16[count]/100.0)*0.3)+(0.7*temp[i][j]);
                     count++;
                 }
             }
@@ -148,15 +148,40 @@ void Global::workImg()
 
                 }
             }
-#ifdef tumo
-            *img=img->scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+            if(houqi)
+            {
+                /*
+                float min=300;
+                float max=-100;
+                for(int i=0;i<23;i++)
+                {
+                    for(int j=0;j<32;j++)
+                    {
+                        if(temp[i][j]>max)
+                        {
+                            max=temp[i][j];
+                        }
+                        if(temp[i][j]<min)
+                        {
+                            min=temp[i][j];
+                        }
+
+                    }
+                }
+                maxTemp=max;
+                minTemp=min;
+                */
+                *img=img->scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
-                    .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
-                    .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-#endif
+
+                        .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
+                        .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            }
+
+
             data.remove(0,1544);
 
 
@@ -261,7 +286,7 @@ void Global::alarm()
     for(int i=0;i<alarmList.count();i++)
     {
         //AlarmBase alm=alarmList[i];
-        qDebug()<<"alarmList[i]"<<alarmList[i].alarmCount<<"i"<<i;
+        //qDebug()<<"alarmList[i]"<<alarmList[i].alarmCount<<"i"<<i;
         if(alarmList[i].alarmCount<alarmDelay)
         {
             if(temp[alarmList[i].y][alarmList[i].x]<alarmList[i].temp)

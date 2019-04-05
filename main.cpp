@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QObject>
 #include "qlog.h"
-#define tumo
+
 
 int main(int argc, char *argv[])
 {

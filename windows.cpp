@@ -78,11 +78,15 @@ void Windows::on_btnClose_clicked()
 }
 void Windows::showImg()
 {
-    ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480
-                                                          #ifdef tumo
-                                                              ,Qt::IgnoreAspectRatio, Qt::SmoothTransformation
-                                                          #endif
-                                                              )));
+    if(g->houqi)
+    {
+            ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
+    }
+    else
+    {
+            ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480)));
+    }
+
 }
 
 
@@ -129,4 +133,9 @@ void Windows::celAlarm(int ch)
 {
     qDebug()<<"slot celAlarm"<<ch;
     ui->listWidgetAlarm->item(ch)->setBackgroundColor(QColor(255,255,255));
+}
+
+void Windows::on_checkBox_stateChanged(int arg1)
+{
+    g->houqi=arg1;
 }
