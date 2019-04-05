@@ -6,6 +6,7 @@
 #include <QPoint>
 #include <QList>
 #include <QColor>
+#include "global.h"
 namespace Ui {
 class Windows;
 }
@@ -19,8 +20,13 @@ public:
     ~Windows();
     QImage *img;
     QList<QColor> colorList;
+private slots:
+    void on_btnOpen_clicked();
+
 private:
     Ui::Windows *ui;
+public slots:
+    void showImg();
 };
 
 #endif // WINDOWS_H

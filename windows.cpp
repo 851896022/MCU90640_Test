@@ -6,6 +6,7 @@ Windows::Windows(QWidget *parent) :
     ui(new Ui::Windows)
 {
     ui->setupUi(this);
+    /*
     img = new QImage(32,24,QImage::Format_ARGB32);
     //img->scaled(32,24);
 
@@ -21,16 +22,7 @@ Windows::Windows(QWidget *parent) :
 
     }
     colorList.append(tmp);
-    for(int j=0;j<255;j++)
-    {
 
-        colorList.append(tmp);
-        tmp.setGreen(tmp.green()+1);
-        tmp.setBlue(tmp.blue()+1);
-    }
-    colorList.append(tmp);
-
-    colorList.append(tmp);
     for(int i=0;i<32;i++)
     {
         for(int j=0;j<24;j++)
@@ -41,10 +33,29 @@ Windows::Windows(QWidget *parent) :
     }
     //img->scaled(320,240);
     ui->imgLabel->setPixmap(QPixmap::fromImage(img->scaled(640,480,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
-
+*/
+    ui->comBox->addItems(g->comNameList);
+    connect(g,SIGNAL(imgOk()),this,SLOT(showImg()));
 }
 
 Windows::~Windows()
 {
     delete ui;
+}
+
+void Windows::on_btnOpen_clicked()
+{
+    if(g->startLink(ui->comBox->currentText()))
+    {
+        ui->btnOpen->setEnabled(false);
+        ui->comBox->setEnabled(false);
+    }
+    else
+    {
+
+    }
+}
+void Windows::showImg()
+{
+    ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480/*,Qt::IgnoreAspectRatio, Qt::SmoothTransformation*/)));
 }

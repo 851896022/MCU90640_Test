@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui  serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         windows.cpp \
-    add.cpp
+    add.cpp \
+    global.cpp
 
 HEADERS += \
         windows.h \
-    add.h
+    add.h \
+    global.h
 
 FORMS += \
         windows.ui \
