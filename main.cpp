@@ -18,8 +18,9 @@ int main(int argc, char *argv[])
     globalThread.start();
 
     Windows w;
-    w.show();
 
+    w.setWindowState(Qt::WindowMaximized);
+    w.show();
     QObject::connect(g,SIGNAL(startOk()),&w,SLOT(startOk()));
     QObject::connect(&w,SIGNAL(startRead(QString)),g,SLOT(startLink(QString)));
     QObject::connect(&w,SIGNAL(stopRead()),g,SLOT(stopReceive()));

@@ -38,11 +38,14 @@ public:
     float TA;
     QTimer *receiverTimer;
     QTimer *alarmTimer;
-    int maxTemp=40;
-    int minTemp=20;
+    float maxTemp=60;
+    float minTemp=20;
+    float max=0;
+    float min=0;
+
     QList<AlarmBase> alarmList;
     int alarmDelay=20;
-    bool houqi=false;
+    bool houqi=true;
 signals:
     void receiveNewData();
     void imgOk();

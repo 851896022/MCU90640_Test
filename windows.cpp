@@ -2,41 +2,18 @@
 #include "ui_windows.h"
 #include "QDebug"
 #include <QProcess>
+#include <QSound>
 Windows::Windows(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Windows)
 {
     ui->setupUi(this);
-    /*
-    img = new QImage(32,24,QImage::Format_ARGB32);
-    //img->scaled(32,24);
 
-    img->setPixelColor(10,10,QColor(15,15,15));
 
-    QColor tmp;
-    tmp.setHsv(180,255,255);
-    for(int j=0;j<180;j++)
-    {
-
-        colorList.append(tmp);
-        tmp.setHsv(tmp.hsvHue()+1,255,255);
-
-    }
-    colorList.append(tmp);
-
-    for(int i=0;i<32;i++)
-    {
-        for(int j=0;j<24;j++)
-        {
-            img->setPixelColor(i,j,colorList[((24.0*i)/768)*180].rgb());
-        }
-
-    }
-    //img->scaled(320,240);
-    ui->imgLabel->setPixmap(QPixmap::fromImage(img->scaled(640,480,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
-*/
     ui->comBox->addItems(g->comNameList);
     connect(g,SIGNAL(imgOk()),this,SLOT(showImg()));
+    ui->txtMaxTemp->setText(QString::number(g->maxTemp));
+    ui->txtMinTemp->setText(QString::number(g->minTemp));
 
 }
 
@@ -80,12 +57,16 @@ void Windows::showImg()
 {
     if(g->houqi)
     {
-            ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
+            ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(ui->imgLabel->geometry().width(),ui->imgLabel->geometry().height(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
     }
     else
     {
-            ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(640,480)));
+            ui->imgLabel->setPixmap(QPixmap::fromImage(g->img->scaled(ui->imgLabel->geometry().width(),ui->imgLabel->geometry().height())));
+
     }
+
+    ui->maxT->setText(QString::number(g->max)+"℃");
+    ui->minT->setText(QString::number(g->min)+"℃");
 
 }
 
@@ -128,6 +109,7 @@ void Windows::doAlarm(int ch)
 {
     qDebug()<<"slot doAlarm"<<ch;
     ui->listWidgetAlarm->item(ch)->setBackgroundColor(QColor(255,100,100));
+    QSound::play(qApp->applicationDirPath()+"/alarm.wav");
 }
 void Windows::celAlarm(int ch)
 {
@@ -138,4 +120,24 @@ void Windows::celAlarm(int ch)
 void Windows::on_checkBox_stateChanged(int arg1)
 {
     g->houqi=arg1;
+}
+
+void Windows::on_txtMaxTemp_textChanged(const QString &arg1)
+{
+    float temp=arg1.toFloat();
+    if(temp<=g->minTemp)
+    {
+        temp=g->minTemp+1;
+    }
+    g->maxTemp=temp;
+}
+
+void Windows::on_txtMinTemp_textChanged(const QString &arg1)
+{
+    float temp=arg1.toFloat();
+    if(temp>=g->maxTemp)
+    {
+        temp=g->maxTemp-1;
+    }
+    g->minTemp=temp;
 }

@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/LeftTitle.png</file>
+        <file>image/Login.png</file>
+        <file>image/LogIntxt.png</file>
+        <file>image/List34.png</file>
+        <file>image/Refresh34.png</file>
+        <file>image/CyclePlayAudio.png</file>
+        <file>image/CycleStopAudio.png</file>
+        <file>image/03.png</file>
+        <file>image/chUiTitle.png</file>
+        <file>image/02.png</file>
+        <file>image/button_red.png</file>
+        <file>image/button_red_A.png</file>
+        <file>image/Logo.png</file>
+        <file>image/toptitle.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix1"/>
+</RCC>

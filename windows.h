@@ -33,6 +33,10 @@ private slots:
     void on_btnDel_clicked();
     void on_checkBox_stateChanged(int arg1);
 
+    void on_txtMaxTemp_textChanged(const QString &arg1);
+
+    void on_txtMinTemp_textChanged(const QString &arg1);
+
 signals:
     void stopRead();
     void startRead(QString);

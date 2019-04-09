@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui  serialport
+QT       += core gui  serialport multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,14 +28,21 @@ SOURCES += \
         windows.cpp \
     add.cpp \
     global.cpp \
-    qlog.cpp
+    qlog.cpp \
+    topbar.cpp
 
 HEADERS += \
         windows.h \
     add.h \
     global.h \
-    qlog.h
+    qlog.h \
+    topbar.h
 
 FORMS += \
         windows.ui \
-    add.ui
+    add.ui \
+    topbar.ui
+
+RESOURCES += \
+    image.qrc
+win32:RC_FILE   = main.rc

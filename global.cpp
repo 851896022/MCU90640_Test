@@ -148,29 +148,30 @@ void Global::workImg()
 
                 }
             }
+            float min=300;
+            float max=-100;
+            for(int i=0;i<23;i++)
+            {
+                for(int j=0;j<32;j++)
+                {
+                    if(temp[i][j]>max)
+                    {
+                        max=temp[i][j];
+                    }
+                    if(temp[i][j]<min)
+                    {
+                        min=temp[i][j];
+                    }
+
+                }
+            }
+            this->max=max;
+            this->min=min;
             if(houqi)
             {
-                /*
-                float min=300;
-                float max=-100;
-                for(int i=0;i<23;i++)
-                {
-                    for(int j=0;j<32;j++)
-                    {
-                        if(temp[i][j]>max)
-                        {
-                            max=temp[i][j];
-                        }
-                        if(temp[i][j]<min)
-                        {
-                            min=temp[i][j];
-                        }
 
-                    }
-                }
-                maxTemp=max;
-                minTemp=min;
-                */
+
+
                 *img=img->scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(320,240,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
                     .scaled(32,24,Qt::IgnoreAspectRatio, Qt::SmoothTransformation)
